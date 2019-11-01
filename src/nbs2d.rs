@@ -4,6 +4,7 @@ pub struct NBS2D {
     pub next: Vec<usize>,
     pub no_x_cells: usize,
     pub no_y_cells: usize,
+    pub total_cells: usize,
     pub cell_size: f32,
     pub x_min: f32,
     pub x_max: f32,
@@ -26,6 +27,7 @@ impl NBS2D {
             next: vec![],
             no_x_cells: no_x_cells,
             no_y_cells: no_y_cells,
+            total_cells: no_x_cells * no_y_cells,
             cell_size: cell_size,
             x_min: x_min,
             x_max: x_max,
@@ -97,17 +99,18 @@ impl NBS2D {
         let mut particle_idx;
         let head = &self.head;
         let next = &self.next;
+        let total_cells = self.total_cells;
         let usize_max_value = usize::max_value();
 
         // check if the particle is in the simulation domain
         if (x >= self.x_min && x <= self.x_max) && (y >= self.y_min && y <= self.y_max) {
-            // println!("query point is inside the domain");
+            println!("query point is inside the domain");
             // get the index in the head array
             let nx = ((x - self.x_min) / self.cell_size) as usize;
             let ny = ((y - self.y_min) / self.cell_size) as usize;
             let idx = ny * self.no_x_cells + nx;
 
-            // println!("x index {} y index {} and head index {}", nx, ny, idx);
+            println!("x index {} y index {} and head index {}", nx, ny, idx);
 
             for neighbour_idx in &[
                 Some(idx),
@@ -122,12 +125,14 @@ impl NBS2D {
             ] {
                 match neighbour_idx {
                     Some(index) => {
-                        particle_idx = head[*index];
-                        // println!("particle_idx before while loop {}", particle_idx);
-                        while particle_idx != usize_max_value {
-                            neighbours.push(particle_idx);
-                            particle_idx = next[particle_idx];
-                            // println!("particle_idx inside while loop {}", particle_idx);
+                        if *index < total_cells {
+                            // println!("particle_idx before while loop {}", index);
+                            particle_idx = head[*index];
+                            while particle_idx != usize_max_value {
+                                neighbours.push(particle_idx);
+                                particle_idx = next[particle_idx];
+                                // println!("particle_idx inside while loop {}", particle_idx);
+                            }
                         }
                     }
                     _ => {}
