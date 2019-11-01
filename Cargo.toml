@@ -1,0 +1,12 @@
+[package]
+name = "neighbours_rs"
+version = "0.1.0"
+authors = ["dineshadepu <adepu.dinesh.a@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "neighbours"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "*"

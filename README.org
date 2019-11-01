@@ -1,0 +1,33 @@
+* NBS algorithm
+  create a 1 dimensional array with the required x and y cells.
+
+  ---------------------
+  |   |   |   |   |   |
+  ---------------------
+  |   |   |   |   |   |
+  ---------------------
+  |   | x |   |   |   |
+  ---------------------
+  |   |   |   |   |   |
+  ---------------------
+  |   |   |   |   |   |
+  ---------------------
+
+  Here we divided the domain into 5 x 5 cells. This is made in to a 25
+  contiguous array. To access the particles in with cell id of (1, 2), x in
+  figure, implies we have 1 as the x-cell id and 2 as y-cell id. In a contiguous
+  array its position will be.
+
+  -----------------------------------------------------------------------------------------------------
+  |   |   |   |   |   |   |   |   |   |   |   | x |   |   |   |   |   |   |   |   |   |   |   |   |   |
+  -----------------------------------------------------------------------------------------------------
+  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11|12 |13 |14 |15 |16 |17 |18 |19 |20 |21 |22 |23 |24 |
+
+  Given the x-cell id and y-cell id, to get the id on the contiguous array, we do
+
+
+  idx = y_id * no_x_cells + x_id
+
+
+  In the above example, we have (1, 2), with no-x-cells as 5 and no-y-cells
+  as 5. The index of the contiguous array will be (2*5 + 1 = 11) as expected.
