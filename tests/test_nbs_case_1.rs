@@ -10,6 +10,8 @@ use neighbours::nbs2d::NBS2D;
 use neighbours::particle_array::ParticleArray;
 use neighbours::NNPS;
 
+// external library imports
+use rand::Rng;
 
 #[test]
 fn test_nbs_creation_for_a_given_domain_limits_case_1() {
@@ -132,7 +134,7 @@ fn test_get_neighbours_9_cells_with_a_single_point_in_each_cell() {
 
     nbs2d.register_particles_to_nnps(&x, &y, &vec![0.]);
 
-    let nbrs = nbs2d.get_neighbours(1.5, 1.5, 0.);
+    let nbrs = nbs2d.get_neighbours(1.5, 1.5, 0.0);
     // this test even tests the neighbour cells traversal
     let expected_neighbours = vec![4, 3, 5, 1, 0, 2, 7, 6, 8];
     assert_eq!(expected_neighbours, nbrs);
@@ -171,21 +173,21 @@ fn test_get_neighbours_25_cells_with_a_single_point_in_some_cells() {
 
     nbs2d.register_particles_to_nnps(&x, &y, &vec![0.]);
 
-    let nbrs = nbs2d.get_neighbours(2.5, 2.5, 0.);
+    let nbrs = nbs2d.get_neighbours(2.5, 2.5, 0.0);
     let expected_neighbours = vec![12, 11, 13, 7, 6, 8, 17, 16, 18];
     assert_eq!(expected_neighbours, nbrs);
 
-    let nbrs = nbs2d.get_neighbours(0.0, 0.1, 0.);
+    let nbrs = nbs2d.get_neighbours(0.0, 0.1, 0.0);
     let expected_neighbours = vec![0, 1, 5, 4, 6];
     assert_eq!(expected_neighbours, nbrs);
 
     // particle in the final cell
-    let nbrs = nbs2d.get_neighbours(4.999, 4.999, 0.);
+    let nbrs = nbs2d.get_neighbours(4.999, 4.999, 0.0);
     let expected_neighbours = vec![24, 23, 19, 18, 20];
     assert_eq!(expected_neighbours, nbrs);
 
     // check the particle which is out of domain
-    let nbrs = nbs2d.get_neighbours(0.0, -0.1, 0.);
+    let nbrs = nbs2d.get_neighbours(0.0, -0.1, 0.0);
     let expected_neighbours: Vec<usize> = vec![];
     assert_eq!(expected_neighbours, nbrs);
 }
@@ -223,7 +225,7 @@ fn test_get_neighbours_with_query_point_on_boundary() {
     nbs2d.register_particles_to_nnps(&x, &y, &vec![0.]);
 
     // check the particle which is on the boundary of domain
-    // let nbrs = nbs2d.get_neighbours(0.0, 0.0, 0.);
+    // let nbrs = nbs2d.get_neighbours(0.0, 0.0, 0.0);
     // let expected_neighbours = vec![0, 1, 5, 4, 6];
     // assert_eq!(expected_neighbours, nbrs);
 
@@ -232,7 +234,7 @@ fn test_get_neighbours_with_query_point_on_boundary() {
     // TODO: This is a
     // good test. This fails. Lets keep it. One take away is you are not
     // supposed to have points on the boundary.
-    let nbrs = nbs2d.get_neighbours(5.0, 5.0, 0.);
+    let nbrs = nbs2d.get_neighbours(5.0, 5.0, 0.0);
     let expected_neighbours = vec![0, 1, 5, 4, 6];
     assert_eq!(expected_neighbours, nbrs);
 }
