@@ -1,18 +1,12 @@
 extern crate neighbours;
 
-// std imports
-use std::fs;
-use std::fs::OpenOptions;
-use std::io::Write;
-
 // local library imports
 use neighbours::nbs2d::NBS2D;
-use neighbours::particle_array::ParticleArray;
 use neighbours::NNPS;
 
 
 #[test]
-fn test_nbs_creation_for_a_given_domain_limits_case_1() {
+fn test_nbs2d_creation_for_a_given_domain_limits_case_1() {
     // the dimensions of the simulation
     let x_min = 0.;
     let x_max = 3.;
@@ -29,7 +23,7 @@ fn test_nbs_creation_for_a_given_domain_limits_case_1() {
 }
 
 #[test]
-fn test_nbs_creation_for_a_given_domain_limits_case_2() {
+fn test_nbs2d_creation_for_a_given_domain_limits_case_2() {
     // the dimensions of the simulation
     let x_min = 0.;
     let x_max = 2.2;
@@ -45,7 +39,7 @@ fn test_nbs_creation_for_a_given_domain_limits_case_2() {
 
 #[test]
 #[should_panic]
-fn test_nbs_creation_for_a_given_domain_limits_less_than_cell_size() {
+fn test_nbs2d_creation_for_a_given_domain_limits_less_than_cell_size() {
     // the dimensions of the simulation
     let x_min = 0.0;
     let x_max = 0.1;
@@ -60,7 +54,7 @@ fn test_nbs_creation_for_a_given_domain_limits_less_than_cell_size() {
 }
 
 #[test]
-fn test_nbs_for_registered_indices_with_single_point_in_each_cell() {
+fn test_nbs2d_for_registered_indices_with_single_point_in_each_cell() {
     let x = vec![0.5, 1.5, 2.5, 0.5, 1.5, 2.5, 0.5, 1.5, 2.5];
     let y = vec![0.5, 0.5, 0.5, 1.5, 1.5, 1.5, 2.5, 2.5, 2.5];
     // the dimensions of the simulation
@@ -83,7 +77,7 @@ fn test_nbs_for_registered_indices_with_single_point_in_each_cell() {
 }
 
 #[test]
-fn test_nbs_for_registered_indices_with_many_points_in_each_cell() {
+fn test_nbs2d_for_registered_indices_with_many_points_in_each_cell() {
     let m = usize::max_value();
     let x = vec![
         0.5, 0.6, 0.7, 1.5, 1.6, 1.7, 2.5, 2.6, 2.7, 0.5, 0.6, 0.7, 1.5, 1.6, 1.7, 2.5, 2.6, 2.7,
