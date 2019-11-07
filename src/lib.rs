@@ -1,6 +1,8 @@
 pub mod nbs2d;
 pub mod nbs3d;
+pub mod bst;
 pub mod particle_array;
+pub mod prelude;
 
 
 pub trait NNPS {
