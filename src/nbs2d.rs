@@ -1,6 +1,5 @@
 use crate::NNPS;
 
-
 #[derive(Debug, Clone)]
 pub struct NBS2D {
     pub head: Vec<usize>,
@@ -8,15 +7,15 @@ pub struct NBS2D {
     pub no_x_cells: usize,
     pub no_y_cells: usize,
     pub total_no_cells: usize,
-    pub cell_size: f32,
-    pub x_min: f32,
-    pub x_max: f32,
-    pub y_min: f32,
-    pub y_max: f32,
+    pub cell_size: f64,
+    pub x_min: f64,
+    pub x_max: f64,
+    pub y_min: f64,
+    pub y_max: f64,
 }
 
 impl NBS2D {
-    pub fn new(x_min: f32, x_max: f32, y_min: f32, y_max: f32, cell_size: f32) -> NBS2D {
+    pub fn new(x_min: f64, x_max: f64, y_min: f64, y_max: f64, cell_size: f64) -> NBS2D {
         // check if the domain size is greater than the cell size
         if cell_size > (x_max - x_min) || cell_size > (y_max - y_min) {
             panic!(
@@ -43,21 +42,48 @@ impl NBS2D {
     }
 
     pub fn from_limits_and_no_of_particles(
-        x_min: f32,
-        x_max: f32,
-        y_min: f32,
-        y_max: f32,
-        cell_size: f32,
+        x_min: f64,
+        x_max: f64,
+        y_min: f64,
+        y_max: f64,
+        cell_size: f64,
         no_of_particles: usize,
-    ) {
+    ) -> NBS2D {
         let mut nbs2d = NBS2D::new(x_min, x_max, y_min, y_max, cell_size);
         nbs2d.initialize_next(no_of_particles);
+        nbs2d
+    }
+
+    pub fn from_maximum_coordinate(max: f64, cell_size: f64) -> NBS2D {
+        let no_x_cells = ((2. * max) / cell_size) as usize;
+        let no_y_cells = ((2. * max) / cell_size) as usize;
+        NBS2D {
+            head: vec![usize::max_value(); no_x_cells * no_y_cells],
+            next: vec![],
+            no_x_cells: no_x_cells,
+            no_y_cells: no_y_cells,
+            total_no_cells: no_x_cells * no_y_cells,
+            cell_size: cell_size,
+            x_min: -max,
+            x_max: max,
+            y_min: -max,
+            y_max: max,
+        }
+    }
+
+    pub fn from_maximum_and_no_of_particles(
+        max: f64,
+        cell_size: f64,
+        no_of_particles: usize,
+    ) -> NBS2D {
+        let mut nbs2d = NBS2D::from_maximum_coordinate(max, cell_size);
+        nbs2d.initialize_next(no_of_particles);
+        nbs2d
     }
 }
 
-
 impl NNPS for NBS2D {
-    fn register_particles_to_nnps(&mut self, x: &[f32], y: &[f32], _: &[f32]){
+    fn register_particles_to_nnps(&mut self, x: &[f64], y: &[f64], _: &[f64]) {
         let max_value = usize::max_value();
 
         let x_min = self.x_min;
@@ -98,7 +124,7 @@ impl NNPS for NBS2D {
         }
     }
 
-    fn get_neighbours(&self, x: f32, y: f32, _: f32) -> Vec<usize> {
+    fn get_neighbours(&self, x: f64, y: f64, _: f64) -> Vec<usize> {
         let mut neighbours: Vec<usize> = vec![];
         let mut particle_idx;
         let head = &self.head;

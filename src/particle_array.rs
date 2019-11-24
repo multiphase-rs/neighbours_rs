@@ -1,8 +1,8 @@
 pub struct ParticleArray {
-    pub x: Vec<f32>,
-    pub y: Vec<f32>,
-    pub z: Vec<f32>,
-    pub radius: Vec<f32>,
+    pub x: Vec<f64>,
+    pub y: Vec<f64>,
+    pub z: Vec<f64>,
+    pub radius: Vec<f64>,
 }
 
 impl ParticleArray {
@@ -14,7 +14,7 @@ impl ParticleArray {
             radius: vec![0.; total_no_particles],
         }
     }
-    pub fn from_xyz_rad(x: &[f32], y: &[f32], z: &[f32], radius: &[f32]) -> Self {
+    pub fn from_xyz_rad(x: &[f64], y: &[f64], z: &[f64], radius: &[f64]) -> Self {
         let total_no_particles = x.len();
         let mut particles = ParticleArray::new(total_no_particles);
         particles.x = x.to_vec();

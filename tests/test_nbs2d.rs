@@ -110,7 +110,7 @@ fn test_nbs2d_for_registered_indices_with_many_points_in_each_cell() {
 
 
 #[test]
-fn test_get_neighbours_9_cells_with_a_single_point_in_each_cell() {
+fn test_nbs2d_get_neighbours_9_cells_with_a_single_point_in_each_cell() {
     let x = vec![0.5, 1.5, 2.5, 0.5, 1.5, 2.5, 0.5, 1.5, 2.5];
     let y = vec![0.5, 0.5, 0.5, 1.5, 1.5, 1.5, 2.5, 2.5, 2.5];
 
@@ -136,7 +136,7 @@ fn test_get_neighbours_9_cells_with_a_single_point_in_each_cell() {
 
 
 #[test]
-fn test_get_neighbours_25_cells_with_a_single_point_in_some_cells() {
+fn test_nbs2d_get_neighbours_25_cells_with_a_single_point_in_some_cells() {
     // the dimensions of the simulation
     let x_min = 0.;
     let x_max = 5.;
@@ -187,7 +187,7 @@ fn test_get_neighbours_25_cells_with_a_single_point_in_some_cells() {
 
 #[test]
 #[ignore]
-fn test_get_neighbours_with_query_point_on_boundary() {
+fn test_nbs2d_get_neighbours_with_query_point_on_boundary() {
     // the dimensions of the simulation
     let x_min = 0.;
     let x_max = 5.;
@@ -229,4 +229,36 @@ fn test_get_neighbours_with_query_point_on_boundary() {
     let nbrs = nbs2d.get_neighbours(5.0, 5.0, 0.);
     let expected_neighbours = vec![0, 1, 5, 4, 6];
     assert_eq!(expected_neighbours, nbrs);
+}
+
+
+#[test]
+#[ignore]
+fn test_nbs2d_10_particles_on_x_axis() {
+    // a take away from this test is, the size of the cell size has to be
+    // a little extra than what we expect. The nnps fails for particles where
+    // they are not bonded, but we want them to be.
+    // For such a purpose, we want the cell size to be little higher.
+    let x = vec![0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.];
+    let y = vec![0.; x.len()];
+    let z = vec![0.; x.len()];
+    let max_coordinate = 2.0;
+
+    let max_size = 2. * 0.05;
+    let mut nbs2d = NBS2D::from_maximum_and_no_of_particles(max_coordinate, max_size, x.len());
+    nbs2d.register_particles_to_nnps(&x, &y, &z);
+
+    // check the number of total cells
+    assert_eq!(64000, nbs2d.head.len());
+
+    nbs2d.register_particles_to_nnps(&x, &y, &z);
+
+    let nbrs = nbs2d.get_neighbours(0., 0., 0.);
+
+    // this test even tests the neighbour cells traversal
+    // let expected_neighbours = vec![
+    //     13, 12, 14, 10, 9, 11, 16, 15, 17, 22, 21, 23, 19, 20, 18, 25, 24, 26, 4, 5, 3, 7, 6, 8, 1,
+    //     2, 0,
+    // ];
+    // assert_eq!(expected_neighbours, nbrs);
 }
